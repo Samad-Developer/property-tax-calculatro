@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+      
+import RegisterServiceWorker from "./register-sw";
 
 type FilerStatus = "filer" | "lateFiler" | "nonFiler";
 
@@ -67,23 +69,24 @@ export default function TaxCalculator() {
     });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-slate-200 to-gray-300 p-6 flex flex-col items-center">
+    <div className="min-h-screen  from-gray-100 via-slate-200 to-gray-300  sm:p-6 flex flex-col items-center">
+      <RegisterServiceWorker/>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-5xl w-full bg-white rounded-3xl shadow-2xl p-10"
+        className="max-w-5xl w-full bg-white rounded-2xl sm:rounded-3xl sm:shadow-2xl p-4 sm:p-6 md:p-10"
       >
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-2">
           🏠 Property Tax Calculator
         </h1>
-        <p className="text-center text-gray-500 mb-10">
+        <p className="text-sm sm:text-base text-center text-gray-500 mb-6 sm:mb-10 px-2">
           Calculate total taxes for Buyer and Seller based on FBR filer status
         </p>
 
         {/* Property Value Threshold Indicator */}
         {propertyValue > 0 && (
-          <div className={`mb-6 p-4 rounded-xl text-center font-semibold ${
+          <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-semibold text-sm sm:text-base ${
             isAboveThreshold 
               ? 'bg-orange-100 text-orange-800 border-2 border-orange-300' 
               : 'bg-green-100 text-green-800 border-2 border-green-300'
@@ -95,8 +98,8 @@ export default function TaxCalculator() {
         )}
 
         {/* Property Value */}
-        <div className="mb-10">
-          <label className="block text-gray-700 font-medium mb-1">
+        <div className="mb-6 sm:mb-10">
+          <label className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">
             Property Value (PKR)
           </label>
           <input
@@ -104,7 +107,7 @@ export default function TaxCalculator() {
             value={propertyValue || ""}
             onChange={(e) => setPropertyValue(Number(e.target.value))}
             placeholder="Enter property value"
-            className="w-full text-black border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="w-full text-black border border-gray-300 rounded-lg sm:rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 outline-none text-sm sm:text-base"
           />
         </div>
 
@@ -113,29 +116,29 @@ export default function TaxCalculator() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-8 bg-gradient-to-r from-purple-50 to-indigo-50 border-2 border-purple-200 rounded-2xl p-6 shadow-md"
+          className="mb-6 sm:mb-8 bg-gradient-to-r from-purple-50 to-indigo-50 border-2 border-purple-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md"
         >
-          <h2 className="text-xl font-semibold text-purple-700 mb-4 flex items-center gap-2">
+          <h2 className="text-lg sm:text-xl font-semibold text-purple-700 mb-3 sm:mb-4 flex items-center gap-2">
             📋 Fixed Charges (Applicable to All Buyers)
           </h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="bg-white rounded-xl p-4 shadow-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-sm">
               <div className="flex justify-between items-center">
-                <span className="text-gray-700 font-medium">TMA (1%)</span>
-                <span className="text-purple-700 font-semibold">{formatPKR(tmaAmount)}</span>
+                <span className="text-gray-700 font-medium text-sm sm:text-base">TMA (1%)</span>
+                <span className="text-purple-700 font-semibold text-sm sm:text-base">{formatPKR(tmaAmount)}</span>
               </div>
             </div>
-            <div className="bg-white rounded-xl p-4 shadow-sm">
+            <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-sm">
               <div className="flex justify-between items-center">
-                <span className="text-gray-700 font-medium">Stamp Duty (1%)</span>
-                <span className="text-purple-700 font-semibold">{formatPKR(stampDutyAmount)}</span>
+                <span className="text-gray-700 font-medium text-sm sm:text-base">Stamp Duty (1%)</span>
+                <span className="text-purple-700 font-semibold text-sm sm:text-base">{formatPKR(stampDutyAmount)}</span>
               </div>
             </div>
           </div>
-          <div className="mt-4 bg-purple-100 rounded-xl p-3">
-            <div className="flex justify-between items-center">
-              <span className="text-purple-800 font-semibold">Total Fixed Charges</span>
-              <span className="text-purple-800 font-bold text-lg">{formatPKR(fixedCharges)}</span>
+          <div className="mt-3 sm:mt-4 bg-purple-100 rounded-lg sm:rounded-xl p-3">
+            <div className="flex flex-col sm:flex-row sm:justify-between items-center">
+              <span className="text-purple-800 font-semibold text-sm sm:text-base">Total Fixed Charges</span>
+              <span className="text-purple-800 font-bold text-base sm:text-lg">{formatPKR(fixedCharges)}</span>
             </div>
           </div>
         </motion.div>
@@ -169,16 +172,13 @@ export default function TaxCalculator() {
             </div>
 
             <div className="mt-6 space-y-2 text-gray-700">
-              <div className="flex justify-between">
-                <span>Fixed Charges (TMA + Stamp)</span>
-                <span className="font-medium">{formatPKR(fixedCharges)}</span>
-              </div>
+             
               <div className="flex justify-between">
                 <span>Filer Tax ({buyerRates[buyerStatus]}%)</span>
                 <span className="font-medium">{formatPKR(buyerFilerTax)}</span>
               </div>
               <hr className="my-3 border-gray-300" />
-              <div className="flex justify-between font-semibold text-indigo-700 text-lg">
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between font-semibold text-indigo-700 text-lg">
                 <span>Total Buyer Tax</span>
                 <span>{formatPKR(buyerTax)}</span>
               </div>
@@ -219,13 +219,13 @@ export default function TaxCalculator() {
                 </span>
               </div>
               <hr className="my-3 border-gray-300" />
-              <div className="flex justify-between font-semibold text-emerald-700 text-lg">
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between font-semibold text-emerald-700 text-lg">
                 <span>Total Seller Tax</span>
                 <span>{formatPKR(sellerTax)}</span>
               </div>
             </div>
           </motion.div>
-        </div>``
+        </div>
 
         {/* Total Summary */}
         <motion.div
@@ -235,12 +235,10 @@ export default function TaxCalculator() {
           transition={{ duration: 0.4 }}
           className="mt-10 bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-6 text-white"
         >
-          <div className="flex justify-between text-xl font-bold">
+          <div className="flex flex-col items-center justify-center text-xl font-bold">
             <span>🏦 Combined Total Tax</span>
             <span className="text-yellow-300">{formatPKR(totalTax + 500)}</span>
           </div>
-
-          
         </motion.div>
 
         <p className="text-xs text-gray-400 text-center mt-8">
