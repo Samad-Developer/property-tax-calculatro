@@ -68,181 +68,199 @@ export default function TaxCalculator() {
       maximumFractionDigits: 0,
     });
 
-  return (
-    <div className="min-h-screen  from-gray-100 via-slate-200 to-gray-300  sm:p-6 flex flex-col items-center">
+return (
+    <div className="min-h-screen bg-slate-50 sm:p-6 flex flex-col items-center justify-center font-sans">
       <RegisterServiceWorker/>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-5xl w-full bg-white rounded-2xl sm:rounded-3xl sm:shadow-2xl p-4 sm:p-6 md:p-10"
+        className="max-w-5xl w-full bg-white rounded-xl shadow-xl border border-slate-200 p-4 sm:p-8 md:p-10"
       >
-        <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-2">
-          🏠 Property Tax Calculator
-        </h1>
-        <p className="text-sm sm:text-base text-center text-gray-500 mb-6 sm:mb-10 px-2">
-          Calculate total taxes for Buyer and Seller based on FBR filer status
-        </p>
+        {/* Header Section */}
+        <div className="text-center mb-8 sm:mb-10">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-100 mb-4">
+             <span className="text-2xl">🏠</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2 tracking-tight">
+            Property Tax Calculator
+          </h1>
+          <p className="text-sm sm:text-base text-slate-500 max-w-lg mx-auto">
+            Calculate total FBR taxes for Buyer and Seller based on filer status and property value.
+          </p>
+        </div>
 
         {/* Property Value Threshold Indicator */}
         {propertyValue > 0 && (
-          <div className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg sm:rounded-xl text-center font-semibold text-sm sm:text-base ${
+          <div className={`mb-6 p-4 rounded-lg border-l-4 text-sm sm:text-base flex items-start sm:items-center gap-3 shadow-sm ${
             isAboveThreshold 
-              ? 'bg-orange-100 text-orange-800 border-2 border-orange-300' 
-              : 'bg-green-100 text-green-800 border-2 border-green-300'
+              ? 'bg-amber-50 text-amber-900 border-amber-400' 
+              : 'bg-blue-50 text-blue-900 border-blue-400'
           }`}>
-            {isAboveThreshold 
-              ? '⚠️ Property value exceeds 5 Crore PKR - Higher tax rates apply'
-              : '✓ Property value is 5 Crore PKR or below - Standard tax rates apply'}
+             <span className="text-lg">{isAboveThreshold ? '⚠️' : '✓'}</span>
+             <span className="font-medium">
+              {isAboveThreshold 
+                ? 'High Value Property (> 5 Crore PKR) - Higher tax rates apply.'
+                : 'Standard Value Property (≤ 5 Crore PKR) - Standard tax rates apply.'}
+             </span>
           </div>
         )}
 
-        {/* Property Value */}
-        <div className="mb-6 sm:mb-10">
-          <label className="block text-gray-700 font-medium mb-1 text-sm sm:text-base">
+        {/* Property Value Input */}
+        <div className="mb-8">
+          <label className="block text-slate-700 font-semibold mb-2 text-sm sm:text-base">
             Property Value (PKR)
           </label>
-          <input
-            type="number"
-            value={propertyValue || ""}
-            onChange={(e) => setPropertyValue(Number(e.target.value))}
-            placeholder="Enter property value"
-            className="w-full text-black border border-gray-300 rounded-lg sm:rounded-xl p-3 focus:ring-2 focus:ring-indigo-500 outline-none text-sm sm:text-base"
-          />
+          <div className="relative">
+            <input
+              type="number"
+              value={propertyValue || ""}
+              onChange={(e) => setPropertyValue(Number(e.target.value))}
+              placeholder="Enter property value e.g. 5000000"
+              className="w-full text-slate-900 border border-slate-300 rounded-lg p-4 pl-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-base sm:text-lg placeholder:text-slate-400"
+            />
+            <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+              <span className="text-slate-400 font-medium">PKR</span>
+            </div>
+          </div>
         </div>
 
-        {/* Fixed Charges Section */}
+        {/* Fixed Charges Section - Styled like a Ledger/Receipt */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="mb-6 sm:mb-8 bg-gradient-to-r from-purple-50 to-indigo-50 border-2 border-purple-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-md"
+          className="mb-8 bg-slate-50 border border-slate-200 rounded-lg p-5 sm:p-6"
         >
-          <h2 className="text-lg sm:text-xl font-semibold text-purple-700 mb-3 sm:mb-4 flex items-center gap-2">
-            📋 Fixed Charges (Applicable to All Buyers)
+          <h2 className="text-sm uppercase tracking-wide font-bold text-slate-500 mb-4 flex items-center gap-2 border-b border-slate-200 pb-2">
+            📋 Fixed Government Charges
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-sm">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-700 font-medium text-sm sm:text-base">TMA (1%)</span>
-                <span className="text-purple-700 font-semibold text-sm sm:text-base">{formatPKR(tmaAmount)}</span>
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div className="flex justify-between items-center bg-white p-3 rounded border border-slate-200">
+              <span className="text-slate-600 text-sm">TMA (1%)</span>
+              <span className="text-slate-900 font-medium font-mono">{formatPKR(tmaAmount)}</span>
             </div>
-            <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-sm">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-700 font-medium text-sm sm:text-base">Stamp Duty (1%)</span>
-                <span className="text-purple-700 font-semibold text-sm sm:text-base">{formatPKR(stampDutyAmount)}</span>
-              </div>
+            <div className="flex justify-between items-center bg-white p-3 rounded border border-slate-200">
+              <span className="text-slate-600 text-sm">Stamp Duty (1%)</span>
+              <span className="text-slate-900 font-medium font-mono">{formatPKR(stampDutyAmount)}</span>
             </div>
           </div>
-          <div className="mt-3 sm:mt-4 bg-purple-100 rounded-lg sm:rounded-xl p-3">
-            <div className="flex flex-col sm:flex-row sm:justify-between items-center">
-              <span className="text-purple-800 font-semibold text-sm sm:text-base">Total Fixed Charges</span>
-              <span className="text-purple-800 font-bold text-base sm:text-lg">{formatPKR(fixedCharges)}</span>
-            </div>
+          <div className="flex justify-between items-center pt-2">
+            <span className="text-slate-700 font-semibold text-sm sm:text-base">Subtotal (Fixed Charges)</span>
+            <span className="text-slate-800 font-bold text-base sm:text-lg font-mono">{formatPKR(fixedCharges)}</span>
           </div>
         </motion.div>
 
         {/* Two Column Layout */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
+          
           {/* Buyer Card */}
           <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 shadow-md"
+            whileHover={{ y: -2 }}
+            className="bg-white border border-blue-100 rounded-xl p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden"
           >
-            <h2 className="text-2xl font-semibold text-indigo-700 mb-3 flex items-center gap-2">
-              🧍‍♂️ Buyer (خریدار)
+            <div className="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+            <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+              <span className="text-blue-600 bg-blue-50 p-1.5 rounded-md">🧍‍♂️</span> Buyer (خریدار)
             </h2>
 
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-1 font-medium">
+            <div className="mb-5">
+              <label className="block text-slate-600 text-sm font-medium mb-1.5">
                 Filer Status
               </label>
-              <select
-                value={buyerStatus}
-                onChange={(e) =>
-                  setBuyerStatus(e.target.value as FilerStatus)
-                }
-                className="w-full text-black border border-gray-300 rounded-xl p-3 bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
-              >
-                <option value="filer">✅ Filer ({buyerRates.filer}%)</option>
-                <option value="lateFiler">⚠️ Late Filer ({buyerRates.lateFiler}%)</option>
-                <option value="nonFiler">❌ Non-Filer ({buyerRates.nonFiler}%)</option>
-              </select>
+              <div className="relative">
+                <select
+                  value={buyerStatus}
+                  onChange={(e) => setBuyerStatus(e.target.value as FilerStatus)}
+                  className="w-full text-slate-900 border border-slate-300 rounded-lg p-3 pr-8 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none appearance-none"
+                >
+                  <option value="filer">✅ Active Filer ({buyerRates.filer}%)</option>
+                  <option value="lateFiler">⚠️ Late Filer ({buyerRates.lateFiler}%)</option>
+                  <option value="nonFiler">❌ Non-Filer ({buyerRates.nonFiler}%)</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </div>
             </div>
 
-            <div className="mt-6 space-y-2 text-gray-700">
-             
-              <div className="flex justify-between">
-                <span>Filer Tax ({buyerRates[buyerStatus]}%)</span>
-                <span className="font-medium">{formatPKR(buyerFilerTax)}</span>
+            <div className="space-y-3 pt-2">
+              <div className="flex justify-between text-slate-600 text-sm">
+                <span>Withholding Tax ({buyerRates[buyerStatus]}%)</span>
+                <span className="font-mono text-slate-800">{formatPKR(buyerFilerTax)}</span>
               </div>
-              <hr className="my-3 border-gray-300" />
-              <div className="flex flex-col sm:flex-row items-center sm:justify-between font-semibold text-indigo-700 text-lg">
-                <span>Total Buyer Tax</span>
-                <span>{formatPKR(buyerTax)}</span>
+              <div className="border-t border-dashed border-slate-200 my-3"></div>
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between">
+                <span className="text-slate-500 text-sm font-medium uppercase">Total Buyer Payable</span>
+                <span className="text-blue-700 font-bold text-xl font-mono">{formatPKR(buyerTax)}</span>
               </div>
             </div>
           </motion.div>
 
           {/* Seller Card */}
           <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 shadow-md"
+            whileHover={{ y: -2 }}
+            className="bg-white border border-teal-100 rounded-xl p-6 shadow-sm hover:shadow-md transition-all relative overflow-hidden"
           >
-            <h2 className="text-2xl font-semibold text-emerald-700 mb-3 flex items-center gap-2">
-              🧍‍♀️ Seller (بیچنے والا)
+            <div className="absolute top-0 left-0 w-full h-1 bg-teal-500"></div>
+            <h2 className="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+              <span className="text-teal-600 bg-teal-50 p-1.5 rounded-md">🧍‍♀️</span> Seller (بیچنے والا)
             </h2>
 
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-1 font-medium">
+            <div className="mb-5">
+              <label className="block text-slate-600 text-sm font-medium mb-1.5">
                 Filer Status
               </label>
-              <select
-                value={sellerStatus}
-                onChange={(e) =>
-                  setSellerStatus(e.target.value as FilerStatus)
-                }
-                className="w-full text-black border border-gray-300 rounded-xl p-3 bg-white focus:ring-2 focus:ring-emerald-500 outline-none"
-              >
-                <option value="filer">✅ Filer ({sellerRates.filer}%)</option>
-                <option value="lateFiler">⚠️ Late Filer ({sellerRates.lateFiler}%)</option>
-                <option value="nonFiler">❌ Non-Filer ({sellerRates.nonFiler}%)</option>
-              </select>
+              <div className="relative">
+                <select
+                  value={sellerStatus}
+                  onChange={(e) => setSellerStatus(e.target.value as FilerStatus)}
+                  className="w-full text-slate-900 border border-slate-300 rounded-lg p-3 pr-8 bg-white focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none appearance-none"
+                >
+                  <option value="filer">✅ Active Filer ({sellerRates.filer}%)</option>
+                  <option value="lateFiler">⚠️ Late Filer ({sellerRates.lateFiler}%)</option>
+                  <option value="nonFiler">❌ Non-Filer ({sellerRates.nonFiler}%)</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                   <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </div>
             </div>
 
-            <div className="mt-6 space-y-2 text-gray-700">
-              <div className="flex justify-between">
-                <span>Filer Tax ({sellerRates[sellerStatus]}%)</span>
-                <span className="font-medium">
-                  {formatPKR(sellerTax)}
-                </span>
+            <div className="space-y-3 pt-2">
+              <div className="flex justify-between text-slate-600 text-sm">
+                <span>Withholding Tax ({sellerRates[sellerStatus]}%)</span>
+                <span className="font-mono text-slate-800">{formatPKR(sellerTax)}</span>
               </div>
-              <hr className="my-3 border-gray-300" />
-              <div className="flex flex-col sm:flex-row items-center sm:justify-between font-semibold text-emerald-700 text-lg">
-                <span>Total Seller Tax</span>
-                <span>{formatPKR(sellerTax)}</span>
+              <div className="border-t border-dashed border-slate-200 my-3"></div>
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between">
+                <span className="text-slate-500 text-sm font-medium uppercase">Total Seller Payable</span>
+                <span className="text-teal-700 font-bold text-xl font-mono">{formatPKR(sellerTax)}</span>
               </div>
             </div>
           </motion.div>
         </div>
 
         {/* Total Summary */}
-        <motion.div
-          key={totalTax}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="mt-10 bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-6 text-white"
+        <div
+          className="mt-10 bg-slate-900 rounded-xl p-6 shadow-lg text-white"
         >
-          <div className="flex flex-col items-center justify-center text-xl font-bold">
-            <span>🏦 Combined Total Tax</span>
-            <span className="text-yellow-300">{formatPKR(totalTax + 500)}</span>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-slate-700 p-2 rounded-lg">
+                <span className="text-2xl">🏦</span>
+              </div>
+              <div className="text-center sm:text-left">
+                <h3 className="text-slate-300 text-sm font-medium uppercase tracking-wider">Estimated Grand Total</h3>
+                <p className="text-slate-400 text-xs">Includes Fixed Charges + Buyer Tax + Seller Tax + Misc</p>
+              </div>
+            </div>
+            <span className="text-3xl font-bold text-white font-mono tracking-tight">{formatPKR(totalTax + 500)}</span>
           </div>
-        </motion.div>
+        </div>
 
-        <p className="text-xs text-gray-400 text-center mt-8">
-          *Sample rates for demonstration only. Adjust per FBR updates.
+        <p className="text-xs text-slate-400 text-center mt-8">
+          *Calculations are estimates based on standard rates. Please consult a tax professional for final verification.
         </p>
       </motion.div>
     </div>
